@@ -1,0 +1,15 @@
+*.zip
+javafx-sdk-21.0.2.zip
+javafx-sdk-21.0.2
+target
+target/
+installer
+installer/
+bin
+bin/
+.project
+.idea
+.idea/
+.classpath
+.settings
+.settings/

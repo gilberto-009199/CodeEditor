@@ -12,63 +12,114 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>21</java.version>
 		<mainClass>com.gilberto009199.editor.App</mainClass>
+		
+		
+		<jpackage.name>CodeEditor</jpackage.name>
 		<jpackage.type>app-image</jpackage.type>
-		<icon.extension>png</icon.extension>
+		<jpackage.icon.extension>png</jpackage.icon.extension>
+
+		<jpackage.description>Code Editor for Students</jpackage.description>
+		<jpackage.copyright>Copyright (c) 2025 gil</jpackage.copyright>
+
 		<dependencies.javafx.version>21.0.2</dependencies.javafx.version>
 		<dependencies.graalvm.polyglot.version>24.2.1</dependencies.graalvm.polyglot.version>
 		
-		<addModules>javafx.controls,javafx.graphics,java.logging,java.desktop</addModules>
+		<addModules>javafx.controls,javafx.graphics,java.logging,java.desktop,java.management</addModules>
 		
 	</properties>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-controls</artifactId>
-			<version>${dependencies.javafx.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-graphics</artifactId>
-			<version>${dependencies.javafx.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.openjfx</groupId>
-			<artifactId>javafx-fxml</artifactId>
-			<version>${dependencies.javafx.version}</version>
-		</dependency>
 
-		<dependency>
-		    <groupId>org.graalvm.polyglot</groupId>
-		    <artifactId>polyglot</artifactId>
-		    <version>${dependencies.graalvm.polyglot.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.graalvm.sdk</groupId>
-		    <artifactId>graal-sdk</artifactId>
-		    <version>${dependencies.graalvm.polyglot.version}</version>
-		</dependency>
-		<dependency>
-		    <groupId>org.graalvm.polyglot</groupId>
-		    <artifactId>js</artifactId>
-		    <version>${dependencies.graalvm.polyglot.version}</version>
-		    <type>pom</type>
-		    <scope>runtime</scope>
-		</dependency>
-		<dependency>
-		    <groupId>org.graalvm.polyglot</groupId>
-		    <artifactId>python</artifactId>
-		    <version>${dependencies.graalvm.polyglot.version}</version>
-		    <type>pom</type>
-		    <scope>runtime</scope>
-		</dependency>
-		<dependency>
-		    <groupId>org.graalvm.polyglot</groupId>
-		    <artifactId>ruby</artifactId>
-		    <version>${dependencies.graalvm.polyglot.version}</version>
-		    <type>pom</type>
-		    <scope>runtime</scope>
-		</dependency>
+	<profiles>
+		<!-- Windows CONFIG -->
+		<profile>
+			<id>windows</id>
+			<activation>
+				<os>
+					<family>Windows</family>
+				</os>
+			</activation>
+			<properties>
+
+				<jpackage.type>exe</jpackage.type>
+				<jpackage.icon.extension>ico</jpackage.icon.extension>
+			</properties>
+		</profile>
+		
+		<!-- LINUX CONFIG -->
+		<profile>
+			<id>linux</id>
+			<activation>
+				<os>
+					<family>unix</family>
+				</os>
+			</activation>
+			<properties>
+
+				<jpackage.type>app-image</jpackage.type>
+
+				<jpackage.icon.extension>png</jpackage.icon.extension>
+			</properties>
+		</profile>
+	</profiles>
+
+
+	<dependencies>
+		<!-- JAVA FX DEPENDENCIES -->
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-controls</artifactId>
+				<version>${dependencies.javafx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-graphics</artifactId>
+				<version>${dependencies.javafx.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-fxml</artifactId>
+				<version>${dependencies.javafx.version}</version>
+			</dependency>
+			
+		<!-- RICH TEXT JAVAFX EDITOR  -->
+			<dependency>
+			    <groupId>org.fxmisc.richtext</groupId>
+			    <artifactId>richtextfx</artifactId>
+			    <version>0.11.6</version>
+			</dependency>
+			
+		<!-- GraalVM Poliglot DEPENDENCIES -->
+			<dependency>
+			    <groupId>org.graalvm.polyglot</groupId>
+			    <artifactId>polyglot</artifactId>
+			    <version>${dependencies.graalvm.polyglot.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.graalvm.sdk</groupId>
+			    <artifactId>graal-sdk</artifactId>
+			    <version>${dependencies.graalvm.polyglot.version}</version>
+			</dependency>
+			<dependency>
+			    <groupId>org.graalvm.polyglot</groupId>
+			    <artifactId>js</artifactId>
+			    <version>${dependencies.graalvm.polyglot.version}</version>
+			    <type>pom</type>
+			    <scope>runtime</scope>
+			</dependency>
+			<dependency>
+			    <groupId>org.graalvm.polyglot</groupId>
+			    <artifactId>python</artifactId>
+			    <version>${dependencies.graalvm.polyglot.version}</version>
+			    <type>pom</type>
+			    <scope>runtime</scope>
+			</dependency>
+			<dependency>
+			    <groupId>org.graalvm.polyglot</groupId>
+			    <artifactId>ruby</artifactId>
+			    <version>${dependencies.graalvm.polyglot.version}</version>
+			    <type>pom</type>
+			    <scope>runtime</scope>
+			</dependency>
 
 	</dependencies>
 
@@ -136,8 +187,7 @@
 			        </filesets>
 			    </configuration>
 			</plugin>
-			
-			
+
 			<plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-antrun-plugin</artifactId>
@@ -203,7 +253,62 @@
 			    </executions>
 			    
 			</plugin>
-			
+
+			<!--  Copy Dependencies JavaFX from Runtime dependencies Package -->
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-resources-plugin</artifactId>
+			    <version>3.3.1</version>
+			    <executions>
+			        <execution>
+			            <id>copy-resources</id>
+			            <phase>package</phase>
+			            <goals>
+			                <goal>copy-resources</goal>
+			            </goals>
+			            <configuration>
+			                <outputDirectory>${project.build.directory}/</outputDirectory>
+			                <resources>
+			                    <resource>
+			                        <directory>${project.basedir}/javafx-sdk-${dependencies.javafx.version}/lib</directory>
+			                        <includes>
+			                            <include>libglass.so</include>
+			                            <include>libglassgtk3.so</include>
+			                            <include>libprism_common.so</include>
+			                            <include>libprism_es2.so</include>
+			                            <include>libprism_sw.so</include>
+			                            <include>libfxplugins.so</include>
+			                            <include>libjavafx_font.so</include>
+			                            <include>libjavafx_font_freetype.so</include>
+			                            <include>libjavafx_font_pango.so</include>
+			                            <include>libjavafx_iio.so</include>
+			                            <include>libdecora_sse.so</include>
+		                        	</includes>
+			                    </resource>
+			                    <!-- Windows -->
+			                    <resource>
+			                        <directory>${project.basedir}/javafx-sdk-${dependencies.javafx.version}/bin</directory>
+			                        <includes>
+			                        	<include>glass.dll</include>
+			                            <include>glib-lite.dll</include>
+			                            <include>gstreamer-lite.dll</include>
+			                            <include>javafx_font.dll</include>
+			                            <include>javafx_iio.dll</include>
+			                            <include>jfxmedia.dll</include>
+			                            <!-- <include>jfxwebkit.dll</include> -->
+			                            <include>prism_common.dll</include>
+			                            <include>prism_d3d.dll</include>
+			                            <include>prism_sw.dll</include>
+			                            <include>decora_sse.dll</include>
+		                        	</includes>
+			                    </resource>
+			                </resources>
+			            </configuration>
+			        </execution>
+			    </executions>
+			</plugin>
+
+            <!--  Build JPackage Executable -->
 			<plugin>
 			    <groupId>org.codehaus.mojo</groupId>
 			    <artifactId>exec-maven-plugin</artifactId>
@@ -231,10 +336,10 @@
 			                    <argument>${project.basedir}/installer</argument>
 			
 			                    <argument>--name</argument>
-			                    <argument>sample</argument>
+			                    <argument>${jpackage.name}</argument>
 			
 			                    <argument>--main-jar</argument>
-			                    <argument>sample-1.0.0.jar</argument>
+			                    <argument>editor-1.0.0.jar</argument>
 			
 			                    <argument>--main-class</argument>
 			                    <argument>${mainClass}</argument>
@@ -243,49 +348,18 @@
 			                    <argument>${jpackage.type}</argument>
 			
 			                    <argument>--icon</argument>
-			                    <argument>src/main/resources/icons/app.${icon.extension}</argument>
+			                    <argument>src/main/resources/icons/app.${jpackage.icon.extension}</argument>
 			
-			                    <argument>--java-options</argument>
+								<argument>--description</argument>
+								<argument>${jpackage.description}</argument>
+								
+								<argument>--copyright</argument>
+			                    <argument>${jpackage.copyright}</argument>
+
+								<argument>--java-options</argument>
 			                    <argument>--enable-preview</argument>
+			                
 			                </arguments>
-			            </configuration>
-			        </execution>
-			    </executions>
-			</plugin>
-			
-			<!--  Copy Dependencies JavaFX from Runtime dependencies Package-->
-			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-resources-plugin</artifactId>
-			    <version>3.3.1</version>
-			    <executions>
-			        <execution>
-			            <id>copy-resources</id>
-			            <phase>package</phase>
-			            <goals>
-			                <goal>copy-resources</goal>
-			            </goals>
-			            <configuration>
-			                <outputDirectory>${project.basedir}/installer/sample/lib/runtime/lib</outputDirectory>
-			                <resources>
-			                    <resource>
-			                        <directory>${project.basedir}/javafx-sdk-${dependencies.javafx.version}/lib</directory>
-			                        <includes>
-			                            <include>libglass.so</include>
-			                            <include>libglassgtk3.so</include>
-			                            <include>libprism_common.so</include>
-			                            <include>libprism_es2.so</include>
-			                            <include>libprism_sw.so</include>
-			                            <include>libfxplugins.so</include>
-			                            <include>libjavafx_font.so</include>
-			                            <include>libjavafx_font_freetype.so</include>
-			                            <include>libjavafx_font_pango.so</include>
-			                            <include>libjavafx_iio.so</include>
-			                            <include>libdecora_sse.so</include>
-			                            <include>*.dll</include> <!-- Windows -->
-		                        	</includes>
-			                    </resource>
-			                </resources>
 			            </configuration>
 			        </execution>
 			    </executions>
@@ -294,30 +368,4 @@
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>windows</id>
-			<activation>
-				<os>
-					<family>Windows</family>
-				</os>
-			</activation>
-			<properties>
-				<jpackage.type>exe</jpackage.type>
-				<icon.extension>ico</icon.extension>
-			</properties>
-		</profile>
-		<profile>
-			<id>linux</id>
-			<activation>
-				<os>
-					<family>unix</family>
-				</os>
-			</activation>
-			<properties>
-				<jpackage.type>app-image</jpackage.type>
-				<icon.extension>png</icon.extension>
-			</properties>
-		</profile>
-	</profiles>
 </project>

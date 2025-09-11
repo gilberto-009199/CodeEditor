@@ -11,16 +11,15 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>21</java.version>
+		
 		<mainClass>com.gilberto009199.editor.App</mainClass>
-		
-		
+				
 		<jpackage.name>CodeEditor</jpackage.name>
-		<jpackage.type>app-image</jpackage.type>
-		<jpackage.icon.extension>png</jpackage.icon.extension>
-
 		<jpackage.description>Code Editor for Students</jpackage.description>
 		<jpackage.copyright>Copyright (c) 2025 gil</jpackage.copyright>
-
+		<jpackage.license-file>src/main/resources/LICENSE</jpackage.license-file>
+		<jpackage.about-url>https://github.com/gilberto-009199/CodeEditor</jpackage.about-url>
+		
 		<dependencies.javafx.version>21.0.2</dependencies.javafx.version>
 		<dependencies.graalvm.polyglot.version>24.2.1</dependencies.graalvm.polyglot.version>
 		
@@ -30,22 +29,98 @@
 
 
 	<profiles>
-		<!-- Windows CONFIG -->
+		<!-- Windows BINARY CONFIG -->
 		<profile>
 			<id>windows</id>
-			<activation>
-				<os>
-					<family>Windows</family>
-				</os>
-			</activation>
 			<properties>
+				<jpackage.packages.dir>${project.basedir}/build/windows-binary</jpackage.packages.dir>
 
-				<jpackage.type>exe</jpackage.type>
+				<jpackage.type>app-image</jpackage.type>
 				<jpackage.icon.extension>ico</jpackage.icon.extension>
 			</properties>
 		</profile>
+		<!-- Windows PACKAGES CONFIG -->
+		<profile>
+			<id>windows-package</id>
+			<properties>
+				<jpackage.packages.dir>${project.basedir}/build/windows-packages</jpackage.packages.dir>
+				<jpackage.type>exe</jpackage.type>
+				<!-- use .msi
+					<jpackage.type>msi</jpackage.type>
+				-->
+				<jpackage.icon.extension>ico</jpackage.icon.extension>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+					    <groupId>org.codehaus.mojo</groupId>
+					    <artifactId>exec-maven-plugin</artifactId>
+					    <version>3.5.1</version>
+					    <executions>
+					        <execution>
+					            <id>jpackage</id>
+					            <phase>package</phase>
+					            <goals>
+					                <goal>exec</goal>
+					            </goals>
+					            <configuration>
+					                <executable>jpackage</executable>
+					                <arguments>
+					                    <argument>--module-path</argument>
+					                    <argument>${project.basedir}/javafx-sdk-${dependencies.javafx.version}/lib</argument>
+					
+					                    <argument>--add-modules</argument>
+					                    <argument>${addModules}</argument>
+					
+					                    <argument>--input</argument>
+					                    <argument>${project.build.directory}</argument>
+					
+					                    <argument>--dest</argument>
+					                    <argument>${jpackage.packages.dir}</argument>
+					
+					                    <argument>--name</argument>
+					                    <argument>${jpackage.name}</argument>
+					
+					                    <argument>--main-jar</argument>
+					                    <argument>editor-1.0.0.jar</argument>
+					
+					                    <argument>--main-class</argument>
+					                    <argument>${mainClass}</argument>
+					
+					                    <argument>--type</argument>
+					                    <argument>${jpackage.type}</argument>
+					
+					                    <argument>--icon</argument>
+					                    <argument>src/main/resources/icons/app.${jpackage.icon.extension}</argument>
+					
+										<argument>--description</argument>
+										<argument>${jpackage.description}</argument>
+										
+										<argument>--copyright</argument>
+					                    <argument>${jpackage.copyright}</argument>
 		
-		<!-- LINUX CONFIG -->
+										<argument>--about-url</argument>
+										<argument>${jpackage.about-url}</argument>
+										
+										<argument>--license-file</argument>
+										<argument>${jpackage.license-file}</argument>
+										
+										<argument>--win-shortcut</argument>
+										<argument>--win-menu</argument>
+										
+										<argument>--java-options</argument>
+					                    <argument>--enable-preview</argument>
+					                
+					                </arguments>
+					            </configuration>
+					        </execution>
+					    </executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		
+		<!-- LINUX BINARY CONFIG -->
 		<profile>
 			<id>linux</id>
 			<activation>
@@ -54,12 +129,12 @@
 				</os>
 			</activation>
 			<properties>
-
+				<jpackage.packages.dir>${project.basedir}/build/linux-binary</jpackage.packages.dir>
 				<jpackage.type>app-image</jpackage.type>
-
 				<jpackage.icon.extension>png</jpackage.icon.extension>
 			</properties>
 		</profile>
+
 	</profiles>
 
 
@@ -182,7 +257,7 @@
 			    <configuration>
 			        <filesets>
 			            <fileset>
-			                <directory>${project.basedir}/installer</directory>
+			                <directory>${jpackage.packages.dir}</directory>
 			            </fileset>
 			        </filesets>
 			    </configuration>
@@ -308,7 +383,7 @@
 			    </executions>
 			</plugin>
 
-            <!--  Build JPackage Executable -->
+            <!--  Build JPackage Executable to Binary dir -->
 			<plugin>
 			    <groupId>org.codehaus.mojo</groupId>
 			    <artifactId>exec-maven-plugin</artifactId>
@@ -333,7 +408,7 @@
 			                    <argument>${project.build.directory}</argument>
 			
 			                    <argument>--dest</argument>
-			                    <argument>${project.basedir}/installer</argument>
+			                    <argument>${jpackage.packages.dir}</argument>
 			
 			                    <argument>--name</argument>
 			                    <argument>${jpackage.name}</argument>

@@ -13,7 +13,7 @@ sudo apt update
 sudo apt install openjdk-21-jdk maven
 git clone https://github.com/gilberto-009199/CodeEditor.git
 cd CodeEditor
-mvn clean package jpackage:jpackage -Plinux
+mvn clean package -Plinux
 ```
 
 
@@ -25,5 +25,8 @@ mvn clean package jpackage:jpackage -Plinux
 + run:
 
 ```powershell
-mvn clean package jpackage:jpackage -Pwindows
+mvn clean package -Pwindows
+# or 
+mvn clean package -Pwindows-package
+
 ```

@@ -6,6 +6,8 @@ target
 target/
 installer
 installer/
+build
+build/
 bin
 bin/
 .project

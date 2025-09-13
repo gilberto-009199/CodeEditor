@@ -1,4 +1,4 @@
-# Code editor Portable
+# Code editor
 
 <img src="./screen.gif" alt="home desktop, runner js and python">
 
@@ -28,5 +28,6 @@ mvn clean package -Plinux
 mvn clean package -Pwindows
 # or 
 mvn clean package -Pwindows-package
+
 
 ```

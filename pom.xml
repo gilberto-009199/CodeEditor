@@ -19,13 +19,14 @@
 		<jpackage.copyright>Copyright (c) 2025 gil</jpackage.copyright>
 		<jpackage.license-file>src/main/resources/LICENSE</jpackage.license-file>
 		<jpackage.about-url>https://github.com/gilberto-009199/CodeEditor</jpackage.about-url>
-		
+        <jpackage.category>Development</jpackage.category>
+
 		<dependencies.javafx.version>21.0.2</dependencies.javafx.version>
 		<dependencies.graalvm.polyglot.version>24.2.1</dependencies.graalvm.polyglot.version>
 		
 		<addModules>javafx.controls,javafx.graphics,java.logging,java.desktop,java.management</addModules>
-		
-	</properties>
+
+    </properties>
 
 
 	<profiles>
@@ -52,70 +53,92 @@
 			</properties>
 			<build>
 				<plugins>
-					<plugin>
-					    <groupId>org.codehaus.mojo</groupId>
-					    <artifactId>exec-maven-plugin</artifactId>
-					    <version>3.5.1</version>
-					    <executions>
-					        <execution>
-					            <id>jpackage</id>
-					            <phase>package</phase>
-					            <goals>
-					                <goal>exec</goal>
-					            </goals>
-					            <configuration>
-					                <executable>jpackage</executable>
-					                <arguments>
-					                    <argument>--module-path</argument>
-					                    <argument>${project.basedir}/javafx-sdk-${dependencies.javafx.version}/lib</argument>
-					
-					                    <argument>--add-modules</argument>
-					                    <argument>${addModules}</argument>
-					
-					                    <argument>--input</argument>
-					                    <argument>${project.build.directory}</argument>
-					
-					                    <argument>--dest</argument>
-					                    <argument>${jpackage.packages.dir}</argument>
-					
-					                    <argument>--name</argument>
-					                    <argument>${jpackage.name}</argument>
-					
-					                    <argument>--main-jar</argument>
-					                    <argument>editor-1.0.0.jar</argument>
-					
-					                    <argument>--main-class</argument>
-					                    <argument>${mainClass}</argument>
-					
-					                    <argument>--type</argument>
-					                    <argument>${jpackage.type}</argument>
-					
-					                    <argument>--icon</argument>
-					                    <argument>src/main/resources/icons/app.${jpackage.icon.extension}</argument>
-					
-										<argument>--description</argument>
-										<argument>${jpackage.description}</argument>
-										
-										<argument>--copyright</argument>
-					                    <argument>${jpackage.copyright}</argument>
-		
-										<argument>--about-url</argument>
-										<argument>${jpackage.about-url}</argument>
-										
-										<argument>--license-file</argument>
-										<argument>${jpackage.license-file}</argument>
-										
-										<argument>--win-shortcut</argument>
-										<argument>--win-menu</argument>
-										
-										<argument>--java-options</argument>
-					                    <argument>--enable-preview</argument>
-					                
-					                </arguments>
-					            </configuration>
-					        </execution>
-					    </executions>
-					</plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>20020829</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+                            <execution>
+                                <id>02-jpackage</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="jpackage">
+                                            <arg value="--module-path"/>
+                                            <arg value="${project.basedir}/javafx-sdk-${dependencies.javafx.version}/lib"/>
+
+                                            <arg value="--add-modules"/>
+                                            <arg value="${addModules}"/>
+
+                                            <arg value="--input"/>
+                                            <arg value="${project.build.directory}"/>
+
+                                            <arg value="--dest"/>
+                                            <arg value="${jpackage.packages.dir}"/>
+
+                                            <arg value="--name"/>
+                                            <arg value="${jpackage.name}"/>
+
+                                            <arg value="--main-jar"/>
+                                            <arg value="editor-1.0.0.jar"/>
+
+                                            <arg value="--main-class"/>
+                                            <arg value="${mainClass}"/>
+
+                                            <arg value="--type"/>
+                                            <arg value="${jpackage.type}"/>
+
+                                            <arg value="--icon"/>
+                                            <arg value="src/main/resources/icons/app.${jpackage.icon.extension}"/>
+
+                                            <arg value="--description"/>
+                                            <arg value="${jpackage.description}"/>
+
+                                            <arg value="--copyright"/>
+                                            <arg value="${jpackage.copyright}"/>
+
+                                            <arg value="--about-url"/>
+                                            <arg value="${jpackage.about-url}"/>
+
+                                            <arg value="--license-file"/>
+                                            <arg value="${jpackage.license-file}"/>
+
+                                            <arg value="--win-help-url"/>
+                                            <arg value="${jpackage.about-url}"/>
+
+                                            <arg value="--win-update-url"/>
+                                            <arg value="${jpackage.about-url}"/>
+
+                                            <arg value="--win-dir-chooser"/>
+                                            <arg value="--win-per-user-install"/>
+
+                                            <arg value="--win-shortcut"/>
+                                            <arg value="--win-shortcut-prompt"/>
+
+                                            <arg value="--win-menu"/>
+                                            <arg value="--win-menu-group"/>
+                                            <arg value="${jpackage.category}"/>
+
+
+                                            <arg value="--java-options"/>
+                                            <arg value="--enable-preview"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
 				</plugins>
 			</build>
 		</profile>
@@ -123,17 +146,205 @@
 		<!-- LINUX BINARY CONFIG -->
 		<profile>
 			<id>linux</id>
+<!--
 			<activation>
 				<os>
 					<family>unix</family>
 				</os>
 			</activation>
+-->
 			<properties>
 				<jpackage.packages.dir>${project.basedir}/build/linux-binary</jpackage.packages.dir>
 				<jpackage.type>app-image</jpackage.type>
 				<jpackage.icon.extension>png</jpackage.icon.extension>
 			</properties>
 		</profile>
+
+        <!-- LINUX BINARY AppImage CONFIG -->
+        <profile>
+            <id>linux-app-image</id>
+            <properties>
+                <jpackage.packages.dir>${project.basedir}/build/linux-app-image</jpackage.packages.dir>
+                <jpackage.type>app-image</jpackage.type>
+                <jpackage.icon.extension>png</jpackage.icon.extension>
+            </properties>
+            <build>
+                <plugins>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>3.1.0</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>ant-contrib</groupId>
+                                <artifactId>ant-contrib</artifactId>
+                                <version>20020829</version>
+                            </dependency>
+                        </dependencies>
+                        <executions>
+
+                            <execution>
+                                <id>check-app-image-tool-kit</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target name="check-and-download-sdk">
+                                        <taskdef resource="net/sf/antcontrib/antcontrib.properties"
+                                                 classpathref="maven.plugin.classpath"/>
+
+                                        <available file="${project.basedir}/appimagetool.AppImage"
+                                                   property="appimagetool.present"/>
+
+                                        <if>
+                                            <not>
+                                                <isset property="appimagetool.present"/>
+                                            </not>
+                                            <then>
+                                                <echo message="AppImage não encontrado. Detectando arquitetura..." />
+                                                <condition property="arch" value="x86_64">
+                                                    <os arch="x86_64" family="unix"/>
+                                                </condition>
+                                                <condition property="arch" value="aarch64">
+                                                    <os arch="aarch64" family="unix"/>
+                                                </condition>
+                                                <condition property="arch" value="armhf">
+                                                    <os arch="arm" family="unix"/>
+                                                </condition>
+                                                <condition property="arch" value="x86_64">
+                                                    <not>
+                                                        <isset property="arch"/>
+                                                    </not>
+                                                </condition>
+                                                <echo message="Arquitetura detectada: ${arch}" />
+                                                <get src="https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-${arch}.AppImage"
+                                                     dest="${project.basedir}/appimagetool.AppImage"
+                                                     verbose="true"
+                                                     usetimestamp="true"/>
+                                                <chmod file="${project.basedir}/appimagetool.AppImage" perm="+x"/>
+                                            </then>
+                                        </if>
+                                    </target>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>jpackage</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="jpackage">
+                                            <arg value="--module-path"/>
+                                            <arg value="${project.basedir}/javafx-sdk-${dependencies.javafx.version}/lib"/>
+
+                                            <arg value="--add-modules"/>
+                                            <arg value="${addModules}"/>
+
+                                            <arg value="--input"/>
+                                            <arg value="${project.build.directory}"/>
+
+                                            <arg value="--dest"/>
+                                            <arg value="${jpackage.packages.dir}"/>
+
+                                            <arg value="--name"/>
+                                            <arg value="${jpackage.name}"/>
+
+                                            <arg value="--main-jar"/>
+                                            <arg value="editor-1.0.0.jar"/>
+
+                                            <arg value="--main-class"/>
+                                            <arg value="${mainClass}"/>
+
+                                            <arg value="--type"/>
+                                            <arg value="${jpackage.type}"/>
+
+                                            <arg value="--icon"/>
+                                            <arg value="src/main/resources/icons/app.${jpackage.icon.extension}"/>
+
+                                            <arg value="--description"/>
+                                            <arg value="${jpackage.description}"/>
+
+                                            <arg value="--copyright"/>
+                                            <arg value="${jpackage.copyright}"/>
+
+                                            <arg value="--java-options"/>
+                                            <arg value="--enable-preview"/>
+                                        </exec>
+                                    </target>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>create-appimage-files</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+
+                                        <echo file="${jpackage.packages.dir}/${jpackage.name}/app.desktop">
+<![CDATA[
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=${jpackage.name}
+Comment=${jpackage.description} - ${jpackage.copyright}
+Exec=bin/${jpackage.name}
+Icon=app
+Categories=${jpackage.category};IDE;
+Terminal=false
+]]>
+                                        </echo>
+
+                                        <echo file="${jpackage.packages.dir}/${jpackage.name}/AppRun">
+<![CDATA[
+#!/bin/bash
+HERE="$(dirname "$(readlink -f "${0}")")"
+cd "$HERE"
+exec ./bin/${jpackage.name} "$@"
+]]>
+                                        </echo>
+
+                                        <!-- Tornar AppRun executável -->
+                                        <chmod file="${jpackage.packages.dir}/${jpackage.name}/AppRun" perm="+x"/>
+
+                                        <!-- Copiar ícone -->
+                                        <copy file="src/main/resources/icons/app.${jpackage.icon.extension}"
+                                              tofile="${jpackage.packages.dir}/${jpackage.name}/app.${jpackage.icon.extension}"/>
+
+                                        <echo message="Arquivos do AppImage criados com sucesso!"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>generate-appimage</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <exec executable="${project.basedir}/appimagetool.AppImage">
+                                            <arg value="${jpackage.packages.dir}/${jpackage.name}"/>
+                                            <arg value="${jpackage.packages.dir}/${jpackage.name}.AppImage"/>
+                                        </exec>
+                                        <echo message="AppImage gerado com sucesso!"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+
+                </plugins>
+            </build>
+        </profile>
 
 	</profiles>
 
@@ -311,7 +522,14 @@
 								        <condition property="javafx.platform" value="mac">
 								            <os family="mac"/>
 								        </condition>
-								        
+
+                                        <!-- Fallback para caso não detecte -->
+                                        <condition property="javafx.platform" value="unix">
+                                            <not>
+                                                <isset property="javafx.platform"/>
+                                            </not>
+                                        </condition>
+
 			                            <get
 			                            	src="https://download2.gluonhq.com/openjfx/${dependencies.javafx.version}/openjfx-${dependencies.javafx.version}_${javafx.platform}-x64_bin-sdk.zip"
 								            dest="${project.basedir}/javafx-sdk-${dependencies.javafx.version}.zip"
@@ -336,8 +554,8 @@
 			    <version>3.3.1</version>
 			    <executions>
 			        <execution>
-			            <id>copy-resources</id>
-			            <phase>package</phase>
+			            <id>copy-libjavafx</id>
+			            <phase>compile</phase>
 			            <goals>
 			                <goal>copy-resources</goal>
 			            </goals>
@@ -380,67 +598,76 @@
 			                </resources>
 			            </configuration>
 			        </execution>
+
+
+
 			    </executions>
 			</plugin>
 
-            <!--  Build JPackage Executable to Binary dir -->
-			<plugin>
-			    <groupId>org.codehaus.mojo</groupId>
-			    <artifactId>exec-maven-plugin</artifactId>
-			    <version>3.5.1</version>
-			    <executions>
-			        <execution>
-			            <id>jpackage</id>
-			            <phase>package</phase>
-			            <goals>
-			                <goal>exec</goal>
-			            </goals>
-			            <configuration>
-			                <executable>jpackage</executable>
-			                <arguments>
-			                    <argument>--module-path</argument>
-			                    <argument>${project.basedir}/javafx-sdk-${dependencies.javafx.version}/lib</argument>
-			
-			                    <argument>--add-modules</argument>
-			                    <argument>${addModules}</argument>
-			
-			                    <argument>--input</argument>
-			                    <argument>${project.build.directory}</argument>
-			
-			                    <argument>--dest</argument>
-			                    <argument>${jpackage.packages.dir}</argument>
-			
-			                    <argument>--name</argument>
-			                    <argument>${jpackage.name}</argument>
-			
-			                    <argument>--main-jar</argument>
-			                    <argument>editor-1.0.0.jar</argument>
-			
-			                    <argument>--main-class</argument>
-			                    <argument>${mainClass}</argument>
-			
-			                    <argument>--type</argument>
-			                    <argument>${jpackage.type}</argument>
-			
-			                    <argument>--icon</argument>
-			                    <argument>src/main/resources/icons/app.${jpackage.icon.extension}</argument>
-			
-								<argument>--description</argument>
-								<argument>${jpackage.description}</argument>
-								
-								<argument>--copyright</argument>
-			                    <argument>${jpackage.copyright}</argument>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>ant-contrib</groupId>
+                        <artifactId>ant-contrib</artifactId>
+                        <version>20020829</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>jpackage</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <exec executable="jpackage">
+                                    <arg value="--module-path"/>
+                                    <arg value="${project.basedir}/javafx-sdk-${dependencies.javafx.version}/lib"/>
 
-								<argument>--java-options</argument>
-			                    <argument>--enable-preview</argument>
-			                
-			                </arguments>
-			            </configuration>
-			        </execution>
-			    </executions>
-			</plugin>
+                                    <arg value="--add-modules"/>
+                                    <arg value="${addModules}"/>
 
-		</plugins>
+                                    <arg value="--input"/>
+                                    <arg value="${project.build.directory}"/>
+
+                                    <arg value="--dest"/>
+                                    <arg value="${jpackage.packages.dir}"/>
+
+                                    <arg value="--name"/>
+                                    <arg value="${jpackage.name}"/>
+
+                                    <arg value="--main-jar"/>
+                                    <arg value="editor-1.0.0.jar"/>
+
+                                    <arg value="--main-class"/>
+                                    <arg value="${mainClass}"/>
+
+                                    <arg value="--type"/>
+                                    <arg value="${jpackage.type}"/>
+
+                                    <arg value="--icon"/>
+                                    <arg value="src/main/resources/icons/app.${jpackage.icon.extension}"/>
+
+                                    <arg value="--description"/>
+                                    <arg value="${jpackage.description}"/>
+
+                                    <arg value="--copyright"/>
+                                    <arg value="${jpackage.copyright}"/>
+
+                                    <arg value="--java-options"/>
+                                    <arg value="--enable-preview"/>
+                                </exec>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+        </plugins>
 	</build>
 
 </project>

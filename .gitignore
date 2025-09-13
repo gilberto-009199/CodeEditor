@@ -2,6 +2,7 @@
 *.zip
 javafx-sdk-21.0.2.zip
 javafx-sdk-21.0.2
+appimagetool.AppImage
 target
 target/
 installer

@@ -12,10 +12,9 @@ public class Main {
 
         LogManager.getLogManager().readConfiguration(App.class.getResourceAsStream("/logging.properties"));
 
-        logger.info("Aplicação iniciando...");
+        logger.info("app init");
 
-        var App = new App(args);
+        App.launch(args);
 
     }
-
 }

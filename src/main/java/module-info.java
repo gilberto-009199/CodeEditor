@@ -11,7 +11,7 @@ module org.openjfx {
     requires java.logging;
 	requires java.desktop;
 	requires java.management;
-    requires org.openjfx;
+    //requires org.openjfx;
 
     exports com.gilberto009199.editor;
     opens com.gilberto009199.editor to javafx.fxml;

@@ -2,7 +2,9 @@ package com.gilberto009199.editor.ui;
 
 import com.gilberto009199.editor.App;
 import com.gilberto009199.editor.assets.IconType;
+import com.gilberto009199.editor.providers.IPoliglot;
 import com.gilberto009199.editor.providers.PoliglotType;
+import com.gilberto009199.editor.state.AppState;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,50 +18,56 @@ import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
+import java.util.logging.Logger;
+
 import static com.gilberto009199.editor.assets.IconType.createHoverIcon;
 import static com.gilberto009199.editor.App.showError;
 
-public class MainUI {
+public class MainUI extends HBox{
 
-    private HBox root;
+    private static final Logger logger = Logger.getLogger(MainUI.class.getName());
+
+    private final AppState appState;
+
     private VBox layoutMenu;
     private CodeArea codeArea;
     private StackPane btnJavaScript;
     private StackPane btnPython;
     private Button btnRunner;
 
-    private final App app;
+    private IPoliglot runner;
 
     public MainUI(App app){
-        this.app = app;
 
-        root = new HBox();
+        super();
 
+        this.appState = AppState.getInstance();
+        
         layoutMenu = new VBox(10);
         layoutMenu.setPadding(new Insets(10));
         layoutMenu.setAlignment(Pos.TOP_CENTER);
         layoutMenu.setPrefWidth(50);
         layoutMenu.setStyle("-fx-background-color: black;");
+
         btnJavaScript = createHoverIcon(IconType.JAVASCRIPT.getImageView(32));
         layoutMenu.getChildren().add(btnJavaScript);
-
-
         btnJavaScript.setOnMouseClicked(event -> {
             btnRunner.setGraphic(IconType.JAVASCRIPT.getImageView(16));
             codeArea.replaceText(PoliglotType.JAVASCRIPT.example);
-            runner = app.runnerJavaScript;
+            runner = appState.getRunnerJavaScript();
             logger.info("JavaScript selecionado.");
         });
 
         btnPython = createHoverIcon(IconType.PYTHON.getImageView(32));
-
-
+        layoutMenu.getChildren().add(btnPython);
         btnPython.setOnMouseClicked(event -> {
             btnRunner.setGraphic(IconType.PYTHON.getImageView(16));
             codeArea.replaceText(PoliglotType.PYTHON.example);
-            runner = runnerPython;
+            runner = appState.getRunnerPython();
             logger.info("Python selecionado.");
         });
+
+        runner = appState.getRunnerJavaScript();
 
         VBox layoutMain = new VBox();
         layoutMain.setStyle("-fx-background-color: #f0f0f0;");
@@ -118,33 +126,11 @@ public class MainUI {
         );
 
         layoutMain.getChildren().addAll(scrollPane, footer);
-        root.getChildren().addAll(layoutMenu, layoutMain);
+        this.getChildren().addAll(layoutMenu, layoutMain);
         HBox.setHgrow(layoutMain, Priority.ALWAYS);
-
-        Scene scene = new Scene(root, 800, 600);
-        scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
-
-        primaryStage.setTitle("My Editor");
-        primaryStage.setScene(scene);
-        primaryStage.setMinHeight(400);
-        primaryStage.setMinWidth(500);
-        primaryStage.show();
 
         logger.info("Interface carregada com sucesso.");
 
     }
-
-    public show(){
-
-
-
-
-
-
-
-
-    }
-
-
 
 }

@@ -1,5 +1,6 @@
 package com.gilberto009199.editor.ui;
 
+import com.gilberto009199.editor.assets.Animations;
 import com.gilberto009199.editor.assets.IconType;
 import com.gilberto009199.editor.providers.IPoliglot;
 import com.gilberto009199.editor.providers.PoliglotType;
@@ -9,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -16,6 +18,7 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
 import java.util.Collections;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
 
 import static com.gilberto009199.editor.App.showError;
@@ -65,29 +68,15 @@ public class EditorUI extends VBox {
 
         btnRunner.setOnAction((eventClick) -> {
             logger.info("Botão Run clicado.");
-            try {
-                runner.onListener(eventRunner -> {
-                    logger.info("Código executado.");
-                    logger.info("Linha: " + eventRunner.getLocation().getEndLine());
-                    logger.info("Coluna: " + eventRunner.getLocation().getEndColumn());
 
-                    if(eventRunner.getException() != null) logger.warning("Exceção: " + eventRunner.getException().getMessage());
+            var animation = Animations.createRotate((ImageView) btnRunner.getGraphic());
 
-                });
+            animation.play();
 
-                String code = codeArea.getText();
-                logger.info("Código sendo executado:\n" + code);
+            CompletableFuture
+                    .runAsync(this::execRunner)
+                    .thenRun(animation::stop);
 
-                //btnRunner.setGraphic(create);
-                runner.execute(code, System.in, System.out);
-                runner.clear();
-
-            } catch (Exception ex) {
-
-                logger.severe("Erro durante execução do código"+ ex.toString());
-
-                showError("Erro na execução", ex.getMessage());
-            }
         });
 
         codeArea.setStyle(0, 10, Collections.singleton("comment"));
@@ -108,6 +97,31 @@ public class EditorUI extends VBox {
                 scrollPane,
                 footer
         );
+    }
+
+    private void execRunner() {
+        try {
+            runner.onListener(eventRunner -> {
+                logger.info("Código executado.");
+                logger.info("Linha: " + eventRunner.getLocation().getEndLine());
+                logger.info("Coluna: " + eventRunner.getLocation().getEndColumn());
+
+                if(eventRunner.getException() != null) logger.warning("Exceção: " + eventRunner.getException().getMessage());
+
+            });
+
+            String code = codeArea.getText();
+            logger.info("Código sendo executado:\n" + code);
+
+            runner.execute(code, System.in, System.out);
+            runner.clear();
+
+        } catch (Exception ex) {
+
+            logger.severe("Erro durante execução do código"+ ex.toString());
+
+            showError("Erro na execução", ex.getMessage());
+        }
     }
 
 }

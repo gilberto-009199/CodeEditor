@@ -8,6 +8,7 @@ import org.graalvm.polyglot.management.ExecutionEvent;
 
 public interface IPoliglot {
 	void execute(String code, InputStream input, OutputStream output);
+    void clear();
     void onListener(Consumer<ExecutionEvent> listener);
 	
 }

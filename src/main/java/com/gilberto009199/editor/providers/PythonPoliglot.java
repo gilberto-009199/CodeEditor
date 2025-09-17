@@ -39,6 +39,16 @@ public class PythonPoliglot implements IPoliglot{
 		context.eval(LANG, code);
 	}
 
+    @Override
+    public void clear(){
+        try {
+            context.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        context = Context.create(LANG);
+    }
+
 	@Override
 	public void onListener(Consumer<ExecutionEvent> listener) {
 		this.listener = listener;

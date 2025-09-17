@@ -346,6 +346,9 @@ exec ./bin/${jpackage.name} "$@"
             </build>
         </profile>
 
+        <!-- LINUX PACKAGES .deb CONFIG -->
+        <!-- LINUX PACKAGES .rpm CONFIG -->
+
 	</profiles>
 
 

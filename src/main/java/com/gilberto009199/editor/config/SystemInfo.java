@@ -1,4 +1,4 @@
-package com.gilberto009199.editor;
+package com.gilberto009199.editor.config;
 
 public class SystemInfo {
 

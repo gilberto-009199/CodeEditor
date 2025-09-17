@@ -14,6 +14,8 @@ sudo apt install openjdk-21-jdk maven
 git clone https://github.com/gilberto-009199/CodeEditor.git
 cd CodeEditor
 mvn clean package -Plinux
+# or 
+mvn clean package -Plinux-app-image
 ```
 
 
@@ -31,3 +33,4 @@ mvn clean package -Pwindows-package
 
 
 ```
+

@@ -15,6 +15,7 @@ import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 
+import java.util.Collections;
 import java.util.logging.Logger;
 
 import static com.gilberto009199.editor.App.showError;
@@ -25,6 +26,7 @@ public class EditorUI extends VBox {
 
     private final AppState appState;
 
+    private final String ID_CODE_AREA = "editor_codeArea";
     protected CodeArea codeArea;
     protected Button btnRunner;
 
@@ -40,6 +42,7 @@ public class EditorUI extends VBox {
         runner = appState.getRunnerJavaScript();
 
         codeArea = new CodeArea();
+        codeArea.setId(ID_CODE_AREA);
         codeArea.replaceText(PoliglotType.JAVASCRIPT.example);
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
 
@@ -86,6 +89,10 @@ public class EditorUI extends VBox {
                 showError("Erro na execução", ex.getMessage());
             }
         });
+
+        codeArea.setStyle(0, 10, Collections.singleton("comment"));
+        codeArea.setStyle(12, 23, Collections.singleton("keyword"));
+        codeArea.setStyle(25, 30, Collections.singleton("operator"));
 
         HBox footer = new HBox(5, comboBox, btnRunner);
         footer.setAlignment(Pos.CENTER_RIGHT);

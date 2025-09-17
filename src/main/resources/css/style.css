@@ -1,3 +1,14 @@
-*{
-	-fx-font-color: red;
+
+#editor_codeArea {
+    -fx-font-size: 1.2em;
+}
+#editor_codeArea .comment {
+    -fx-fill: green;
+}
+#editor_codeArea .keyword {
+    -fx-fill: pink;
+}
+
+#editor_codeArea .operator{
+    -fx-fill: blue;
 }

@@ -1,15 +1,9 @@
 package com.gilberto009199.editor;
 
-import java.io.IOException;
 import java.util.logging.*;
-import javax.swing.JOptionPane;
 
 import com.gilberto009199.editor.state.AppState;
 import com.gilberto009199.editor.ui.MainUI;
-
-import com.gilberto009199.editor.providers.IPoliglot;
-import com.gilberto009199.editor.providers.PoliglotBuilder;
-import com.gilberto009199.editor.providers.PoliglotType;
 
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -46,6 +40,18 @@ public class App extends Application {
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(500);
         primaryStage.show();
+
+
+        Thread.setDefaultUncaughtExceptionHandler(
+                (thread, exception) ->
+                {
+                    showError("Exceção ",
+                            "Ocorreu um erro: " + thread.getName());
+                    logger.finest(exception.getMessage());
+                    exception.printStackTrace();
+                }
+
+        );
     }
 
     public static void showError(String title, String message) {

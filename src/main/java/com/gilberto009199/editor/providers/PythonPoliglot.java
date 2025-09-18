@@ -20,11 +20,7 @@ public class PythonPoliglot implements IPoliglot{
 	
 	private final static String LANG = "python";
 
-    private static final String[] KEYWORDS = new String[] {
-            "if", "else", "elif", "for", "while", "def", "class", "return",
-            "import", "from", "as", "try", "except", "finally", "with",
-            "and", "or", "not", "in", "is", "True", "False", "None"
-    };
+    private static final String[] KEYWORDS_PATTERN = PoliglotType.PYTHON.KEYWORDS;
 
     // @todo add functions default input print ...
     // @todo add operators math, binarios

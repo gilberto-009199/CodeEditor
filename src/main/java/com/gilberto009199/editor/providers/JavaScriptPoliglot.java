@@ -17,6 +17,11 @@ import org.graalvm.polyglot.proxy.ProxyExecutable;
 public class JavaScriptPoliglot implements IPoliglot {
 
     private final static String LANG = "js";
+
+    private static final String[] KEYWORDS = new String[] {
+            "prompt", "alert", "let", "var", "const"
+    };
+
     private Context context;
     private Consumer<ExecutionEvent> listener;
 
@@ -50,9 +55,10 @@ public class JavaScriptPoliglot implements IPoliglot {
     }
 
     @Override
-    public void onListener(Consumer<ExecutionEvent> listener) {
-        this.listener = listener;
-    }
+    public void onListener(Consumer<ExecutionEvent> listener) {  this.listener = listener;  }
+
+    @Override
+    public String[] keyworkds() {   return KEYWORDS;  }
 
     public static class PromptFunction {
         private Scanner scanner;
@@ -105,7 +111,6 @@ public class JavaScriptPoliglot implements IPoliglot {
         }
     }
 
-    // Método para fechar o contexto quando não for mais necessário
     public void close() {
         try {
             if (context != null) {

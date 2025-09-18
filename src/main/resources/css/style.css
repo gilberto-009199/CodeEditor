@@ -6,9 +6,16 @@
     -fx-fill: green;
 }
 #editor_codeArea .keyword {
-    -fx-fill: pink;
+    -fx-fill: red;
 }
-
 #editor_codeArea .operator{
     -fx-fill: blue;
 }
+
+#editor_codeArea .string {
+    -fx-fill: green;
+}
+
+stack-pane:disabled {
+     -fx-cursor: default;
+ }

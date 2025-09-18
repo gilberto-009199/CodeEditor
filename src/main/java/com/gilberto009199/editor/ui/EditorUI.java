@@ -5,6 +5,8 @@ import com.gilberto009199.editor.assets.IconType;
 import com.gilberto009199.editor.providers.IPoliglot;
 import com.gilberto009199.editor.providers.PoliglotType;
 import com.gilberto009199.editor.state.AppState;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -16,10 +18,14 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import org.fxmisc.richtext.model.StyleSpansBuilder;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.gilberto009199.editor.App.showError;
 
@@ -34,6 +40,7 @@ public class EditorUI extends VBox {
     protected Button btnRunner;
 
     protected IPoliglot runner;
+    private ChangeListener<String> listener;
 
     public EditorUI(MainUI mainUI){
         super();
@@ -45,9 +52,12 @@ public class EditorUI extends VBox {
         runner = appState.getRunnerJavaScript();
 
         codeArea = new CodeArea();
+
+        syntaxHighlighter();
         codeArea.setId(ID_CODE_AREA);
         codeArea.replaceText(PoliglotType.JAVASCRIPT.example);
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
+
 
         ScrollPane scrollPane = new ScrollPane(codeArea);
         scrollPane.setFitToWidth(true);
@@ -79,10 +89,6 @@ public class EditorUI extends VBox {
 
         });
 
-        codeArea.setStyle(0, 10, Collections.singleton("comment"));
-        codeArea.setStyle(12, 23, Collections.singleton("keyword"));
-        codeArea.setStyle(25, 30, Collections.singleton("operator"));
-
         HBox footer = new HBox(5, comboBox, btnRunner);
         footer.setAlignment(Pos.CENTER_RIGHT);
         footer.setPadding(new Insets(5));
@@ -93,10 +99,42 @@ public class EditorUI extends VBox {
                         """
         );
 
-        getChildren().addAll(
+        getChildren()
+        .addAll(
                 scrollPane,
                 footer
         );
+    }
+
+    private void syntaxHighlighter() {
+
+        var keywordPattern = Pattern.compile("\\b(" + String.join("|", runner.keyworkds()) + ")\\b");
+
+        if(listener != null) codeArea.textProperty().removeListener(listener);
+
+        listener = (obs, oldText, newText) -> {
+
+            Matcher matcher = keywordPattern.matcher(newText);
+            int lastKwEnd = 0;
+            StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
+
+            while (matcher.find()) {
+                String styleClass = null;
+
+                spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
+
+                spansBuilder.add(Collections.singleton("keyword"), matcher.end() - matcher.start());
+
+                lastKwEnd = matcher.end();
+            }
+
+            spansBuilder.add(Collections.emptyList(), newText.length() - lastKwEnd);
+
+            codeArea.setStyleSpans(0, spansBuilder.create());
+        };
+
+        codeArea.textProperty().addListener(listener);
+
     }
 
     private void execRunner() {
@@ -124,4 +162,16 @@ public class EditorUI extends VBox {
         }
     }
 
+    public void changeRunner(PoliglotType poliglotType) {
+
+        runner = switch(poliglotType){
+            case PoliglotType.JAVASCRIPT -> appState.getRunnerJavaScript();
+            case PoliglotType.PYTHON -> appState.getRunnerPython();
+        };
+
+        syntaxHighlighter();
+
+        btnRunner.setGraphic(poliglotType.iconType.getImageView(16));
+        codeArea.replaceText(poliglotType.example);
+    }
 }

@@ -19,6 +19,11 @@ import com.gilberto009199.editor.providers.JavaScriptPoliglot.PromptFunction;
 public class PythonPoliglot implements IPoliglot{
 	
 	private final static String LANG = "python";
+
+    private static final String[] KEYWORDS = new String[] {
+            "print", "input", "global", "def", "self"
+    };
+
 	private Context context;
 	private Consumer<ExecutionEvent> listener;
 
@@ -50,10 +55,10 @@ public class PythonPoliglot implements IPoliglot{
     }
 
 	@Override
-	public void onListener(Consumer<ExecutionEvent> listener) {
-		this.listener = listener;
-	}
-	
+	public void onListener(Consumer<ExecutionEvent> listener) { this.listener = listener; }
+
+    @Override
+    public String[] keyworkds() {   return KEYWORDS;  }
 
 
 	public static class PromptFunction {

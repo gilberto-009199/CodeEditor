@@ -17,15 +17,11 @@ public class MenuUI extends VBox {
 
     private static final Logger logger = Logger.getLogger(MenuUI.class.getName());
 
-    private final AppState appState;
-
-    private StackPane btnJavaScript;
-    private StackPane btnPython;
+    private final StackPane btnJavaScript;
+    private final StackPane btnPython;
 
     public MenuUI(MainUI main){
         super();
-
-        this.appState = AppState.getInstance();
 
         setPadding(new Insets(10));
         setAlignment(Pos.TOP_CENTER);
@@ -34,22 +30,34 @@ public class MenuUI extends VBox {
 
         btnJavaScript = createHoverIcon(IconType.JAVASCRIPT.getImageView(32));
         getChildren().add(btnJavaScript);
-        btnJavaScript.setOnMouseClicked(event -> {
-            main.editorUI.btnRunner.setGraphic(IconType.JAVASCRIPT.getImageView(16));
-            main.editorUI.codeArea.replaceText(PoliglotType.JAVASCRIPT.example);
-
-            main.editorUI.runner = appState.getRunnerJavaScript();
-            logger.info("JavaScript selecionado.");
-        });
+        btnJavaScript.setDisable(true);
 
         btnPython = createHoverIcon(IconType.PYTHON.getImageView(32));
         getChildren().add(btnPython);
-        btnPython.setOnMouseClicked(event -> {
-            main.editorUI.btnRunner.setGraphic(IconType.PYTHON.getImageView(16));
-            main.editorUI.codeArea.replaceText(PoliglotType.PYTHON.example);
 
-            main.editorUI.runner = appState.getRunnerPython();
+
+        btnJavaScript.setOnMouseClicked(event -> {
+
+            if(btnJavaScript.isDisable())return;
+
+            main.editorUI.changeRunner(PoliglotType.JAVASCRIPT);
+
+            logger.info("JavaScript selecionado.");
+
+            btnJavaScript.setDisable(true);
+            btnPython.setDisable(false);
+        });
+
+        btnPython.setOnMouseClicked(event -> {
+
+            if(btnPython.isDisable())return;
+
+            main.editorUI.changeRunner(PoliglotType.PYTHON);
+
             logger.info("Python selecionado.");
+
+            btnPython.setDisable(true);
+            btnJavaScript.setDisable(false);
         });
     }
 }

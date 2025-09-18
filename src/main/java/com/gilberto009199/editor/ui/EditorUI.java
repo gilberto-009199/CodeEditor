@@ -108,22 +108,42 @@ public class EditorUI extends VBox {
 
     private void syntaxHighlighter() {
 
-        var keywordPattern = Pattern.compile("\\b(" + String.join("|", runner.keyworkds()) + ")\\b");
+        var pattern = runner.pattern();
 
         if(listener != null) codeArea.textProperty().removeListener(listener);
 
         listener = (obs, oldText, newText) -> {
 
-            Matcher matcher = keywordPattern.matcher(newText);
+            Matcher matcher = pattern.matcher(newText);
             int lastKwEnd = 0;
             StyleSpansBuilder<Collection<String>> spansBuilder = new StyleSpansBuilder<>();
 
             while (matcher.find()) {
                 String styleClass = null;
 
+                if (matcher.group("KEYWORD") != null) {
+                    styleClass = "keyword";
+                } else if (matcher.group("OPERATOR") != null) {
+                    styleClass = "operator";
+                } else if (matcher.group("STRING") != null) {
+                    styleClass = "string";
+                } else if (matcher.group("COMMENT") != null) {
+                    styleClass = "comment";
+                } else if (matcher.group("NUMBER") != null) {
+                    styleClass = "number";
+                } else if (matcher.group("BRACKET") != null) {
+                    styleClass = "bracket";
+                }
+
+                // Adiciona texto normal antes do match
                 spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
 
-                spansBuilder.add(Collections.singleton("keyword"), matcher.end() - matcher.start());
+                // Adiciona texto com estilo
+                if (styleClass != null) {
+                    spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
+                } else {
+                    spansBuilder.add(Collections.emptyList(), matcher.end() - matcher.start());
+                }
 
                 lastKwEnd = matcher.end();
             }

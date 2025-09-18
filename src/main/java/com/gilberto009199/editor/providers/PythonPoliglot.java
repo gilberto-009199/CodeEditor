@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Scanner;
 import java.util.function.Consumer;
+import java.util.regex.Pattern;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -20,10 +21,16 @@ public class PythonPoliglot implements IPoliglot{
 	
 	private final static String LANG = "python";
 
-    private static final String[] KEYWORDS_PATTERN = PoliglotType.PYTHON.KEYWORDS;
-
-    // @todo add functions default input print ...
-    // @todo add operators math, binarios
+    private static final String KEYWORDS_PATTERN = "\\b(" + String.join("|", PoliglotType.PYTHON.KEYWORDS) + ")\\b";
+    private static final String OPERATORS_PATTERN = "\\b(" + String.join("|", PoliglotType.PYTHON.OPERATORS) + ")\\b";
+    private static final Pattern PATTERN = Pattern.compile(
+            "(?<KEYWORD>" + KEYWORDS_PATTERN + ")" +
+                    "|(?<OPERATOR>" + OPERATORS_PATTERN + ")" +
+                    "|(?<STRING>\"\"\"[\\s\\S]*?\"\"\"|\"([^\"\\\\]|\\\\.)*\"|'([^'\\\\]|\\\\.)*')" +
+                    "|(?<COMMENT>#.*|'''[\\s\\S]*?'''|\"\"\"[\\s\\S]*?\"\"\")" +
+                    "|(?<NUMBER>\\b\\d+(\\.\\d+)?([eE][+-]?\\d+)?\\b)" +
+                    "|(?<BRACKET>[\\{\\}\\(\\)\\[\\]])"
+    );
 
 
 	private Context context;
@@ -60,7 +67,7 @@ public class PythonPoliglot implements IPoliglot{
 	public void onListener(Consumer<ExecutionEvent> listener) { this.listener = listener; }
 
     @Override
-    public String[] keyworkds() {   return KEYWORDS;  }
+    public Pattern pattern() {   return PATTERN;  }
 
 
 	public static class PromptFunction {

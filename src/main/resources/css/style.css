@@ -5,15 +5,19 @@
 #editor_codeArea .comment {
     -fx-fill: green;
 }
-#editor_codeArea .keyword {
+#editor_codeArea .keyword, #editor_codeArea .bracket {
     -fx-fill: red;
 }
 #editor_codeArea .operator{
-    -fx-fill: blue;
+    -fx-fill: red;
 }
 
 #editor_codeArea .string {
     -fx-fill: green;
+}
+
+#editor_codeArea  .number{
+    -fx-fill: blue;
 }
 
 stack-pane:disabled {

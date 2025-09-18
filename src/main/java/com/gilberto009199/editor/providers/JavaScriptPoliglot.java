@@ -19,8 +19,14 @@ public class JavaScriptPoliglot implements IPoliglot {
     private final static String LANG = "js";
 
     private static final String[] KEYWORDS = new String[] {
-            "prompt", "alert", "let", "var", "const"
+            "var", "let", "const", "if", "else", "for", "while", "do", "switch",
+            "case", "break", "continue", "function", "return", "class", "this",
+            "new", "typeof", "true", "false", "null", "undefined", "try", "catch",
+            "throw", "import", "export", "async", "await", "yield"
     };
+
+    // @todo add functions default alert prompt ...
+    // @todo add operators math, binarios
 
     private Context context;
     private Consumer<ExecutionEvent> listener;

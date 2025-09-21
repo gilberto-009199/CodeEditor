@@ -33,10 +33,7 @@ public class JavaScriptPoliglot implements IPoliglot {
     private Context context;
     private Consumer<ExecutionEvent> listener;
 
-    public JavaScriptPoliglot() {
-        context = Context.create(LANG);
-
-    }
+    public JavaScriptPoliglot() {  context = Context.create(LANG);  }
 
     @Override
     public void execute(String code, InputStream input, OutputStream output) {

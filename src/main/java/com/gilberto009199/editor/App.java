@@ -6,6 +6,7 @@ import com.gilberto009199.editor.state.AppState;
 import com.gilberto009199.editor.ui.MainUI;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
@@ -55,13 +56,15 @@ public class App extends Application {
     }
 
     public static void showError(String title, String message) {
-        logger.severe(message);
-        logger.warning("Exibindo erro: " + title + " - " + message);
-        Alert alert = new Alert(AlertType.ERROR);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        alert.showAndWait();
+        Platform.runLater(()->{
+            logger.severe(message);
+            logger.warning("Exibindo erro: " + title + " - " + message);
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle(title);
+            alert.setHeaderText(null);
+            alert.setContentText(message);
+            alert.showAndWait();
+        });
     }
 
 }

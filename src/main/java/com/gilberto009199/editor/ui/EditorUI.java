@@ -5,6 +5,7 @@ import com.gilberto009199.editor.assets.IconType;
 import com.gilberto009199.editor.providers.IPoliglot;
 import com.gilberto009199.editor.providers.PoliglotType;
 import com.gilberto009199.editor.state.AppState;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
@@ -64,14 +65,6 @@ public class EditorUI extends VBox {
         scrollPane.setFitToHeight(true);
         VBox.setVgrow(scrollPane, Priority.ALWAYS);
 
-        ComboBox<String> comboBox = new ComboBox<>();
-        comboBox.getItems().addAll(
-                "Grafics Input&OutPut",
-                "Text input&OutPut",
-                "CLI input&OutPut",
-                "File Input&OutPut"
-        );
-        comboBox.setValue("Grafics Input&OutPut");
 
         btnRunner = new Button("Run");
         btnRunner.setGraphic(IconType.JAVASCRIPT.getImageView(16));
@@ -83,13 +76,12 @@ public class EditorUI extends VBox {
 
             animation.play();
 
-            CompletableFuture
-                    .runAsync(this::execRunner)
-                    .thenRun(animation::stop);
+            execRunner(codeArea.getText())
+                    .thenRun(() -> Platform.runLater(animation::stop));
 
         });
 
-        HBox footer = new HBox(5, comboBox, btnRunner);
+        HBox footer = new HBox(5, btnRunner);
         footer.setAlignment(Pos.CENTER_RIGHT);
         footer.setPadding(new Insets(5));
         footer.setStyle(
@@ -157,29 +149,30 @@ public class EditorUI extends VBox {
 
     }
 
-    private void execRunner() {
-        try {
-            runner.onListener(eventRunner -> {
-                logger.info("Código executado.");
-                logger.info("Linha: " + eventRunner.getLocation().getEndLine());
-                logger.info("Coluna: " + eventRunner.getLocation().getEndColumn());
+    private CompletableFuture<Void> execRunner(String code) {
+        return CompletableFuture.runAsync(()->{
+            try {
+                runner.onListener(eventRunner -> {
+                    logger.info("Código executado.");
+                    logger.info("Linha: " + eventRunner.getLocation().getEndLine());
+                    logger.info("Coluna: " + eventRunner.getLocation().getEndColumn());
 
-                if(eventRunner.getException() != null) logger.warning("Exceção: " + eventRunner.getException().getMessage());
+                    if (eventRunner.getException() != null)
+                        logger.warning("aaaaaaaaaaaaa: " + eventRunner.getException().getCause().getMessage());
 
-            });
+                });
 
-            String code = codeArea.getText();
-            logger.info("Código sendo executado:\n" + code);
+                logger.info("Código sendo executado:\n" + code);
 
-            runner.execute(code, System.in, System.out);
-            runner.clear();
+                runner.execute(code, System.in, System.out);
+                runner.clear();
+            } catch (Exception e) {
 
-        } catch (Exception ex) {
+                showError("Erro durante a execução!", e.getCause().getMessage());
 
-            logger.severe("Erro durante execução do código"+ ex.toString());
+            }
+        });
 
-            showError("Erro na execução", ex.getMessage());
-        }
     }
 
     public void changeRunner(PoliglotType poliglotType) {

@@ -59,15 +59,16 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.sha }}
-          name: "Build ${{ github.sha }}"
+          tag_name: "build-${{ github.run_id }}-${{ github.run_attempt }}"
+          name: "Build ${{ github.run_number }} - ${{ github.sha }}"
           body: |
             Automated build from main branch
             Commit: ${{ github.sha }}
             Date: ${{ github.event.head_commit.timestamp }}
+            Workflow Run: ${{ github.run_id }} (Attempt: ${{ github.run_attempt }})
           files: |
-            dist/StudentEditor.AppImage
-            dist/StudentEditor-linux-x64.tar.gz
+            dist/*.AppImage
+            dist/*.tar.gz
           draft: false
           prerelease: true
         env:

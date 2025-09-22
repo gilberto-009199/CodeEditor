@@ -2,7 +2,7 @@ name: Build and Release Linux App Image
 
 on:
   push:
-    branches: [main]
+    branches: [release]
 
 permissions:
   contents: write

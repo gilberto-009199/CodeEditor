@@ -13,12 +13,12 @@
 		<java.version>21</java.version>
 		
 		<mainClass>com.gilberto009199.editor.App</mainClass>
-				
-		<jpackage.name>CodeEditor</jpackage.name>
+
+		<jpackage.name>StudentEditor</jpackage.name>
 		<jpackage.description>Code Editor for Students</jpackage.description>
 		<jpackage.copyright>Copyright (c) 2025 gil</jpackage.copyright>
 		<jpackage.license-file>src/main/resources/LICENSE</jpackage.license-file>
-		<jpackage.about-url>https://github.com/gilberto-009199/CodeEditor</jpackage.about-url>
+		<jpackage.about-url>https://github.com/gilberto-009199/StudentEditor</jpackage.about-url>
         <jpackage.category>Development</jpackage.category>
 
 		<dependencies.javafx.version>21.0.2</dependencies.javafx.version>
@@ -90,7 +90,7 @@
                                             <arg value="${jpackage.name}"/>
 
                                             <arg value="--main-jar"/>
-                                            <arg value="editor-1.0.0.jar"/>
+                                            <arg value="${jpackage.name}.jar"/>
 
                                             <arg value="--main-class"/>
                                             <arg value="${mainClass}"/>
@@ -255,7 +255,7 @@
                                             <arg value="${jpackage.name}"/>
 
                                             <arg value="--main-jar"/>
-                                            <arg value="editor-1.0.0.jar"/>
+                                            <arg value="${jpackage.name}.jar"/>
 
                                             <arg value="--main-class"/>
                                             <arg value="${mainClass}"/>
@@ -413,8 +413,8 @@ exec ./bin/${jpackage.name} "$@"
 	</dependencies>
 
 	<build>
+        <finalName>${jpackage.name}</finalName>
 		<plugins>
-
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
@@ -644,7 +644,7 @@ exec ./bin/${jpackage.name} "$@"
                                     <arg value="${jpackage.name}"/>
 
                                     <arg value="--main-jar"/>
-                                    <arg value="editor-1.0.0.jar"/>
+                                    <arg value="${jpackage.name}.jar"/>
 
                                     <arg value="--main-class"/>
                                     <arg value="${mainClass}"/>

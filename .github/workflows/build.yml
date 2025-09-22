@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -43,8 +43,48 @@ jobs:
            name: linux-build-artifacts
            path: dist/
 
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install WiX Toolset
+        run: choco install wixtoolset --no-progress -y
+
+      - name: Install Maven
+        run: choco install maven --no-progress -y
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: 'maven'
+
+      - name: Build Binary (Windows profile)
+        run: mvn clean package -Pwindows
+
+      - name: Build Windows Package
+        run: mvn clean package -Pwindows-package
+
+      - name: Copy artifacts
+        run: |
+          mkdir dist
+          copy build\\windows-binary\\StudentEditor.exe dist\\
+          copy build\\windows-packages\\StudentEditor.exe dist\\StudentEditor_installer.exe
+          echo "Windows build OK"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-build-artifacts
+          path: dist/
+
   release:
-    needs: build
+    needs: [build-linux, build-windows]
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
@@ -69,6 +109,7 @@ jobs:
           files: |
             dist/*.AppImage
             dist/*.tar.gz
+            dist/*.exe
           draft: false
           prerelease: true
         env:

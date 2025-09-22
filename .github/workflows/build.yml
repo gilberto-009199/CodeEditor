@@ -77,6 +77,11 @@ jobs:
           copy build\windows-packages\StudentEditor-1.0.exe dist\StudentEditor_installer.exe
           echo "Windows artifacts OK"
 
+      - name: List artifacts
+        run: |
+          echo "=== Conteúdo da pasta dist ==="
+          dir dist
+
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -88,10 +93,16 @@ jobs:
     needs: [build-linux, build-windows]
     runs-on: ubuntu-latest
     steps:
-      - name: Download artifacts
+      - name: Download Linux artifacts
         uses: actions/download-artifact@v4
         with:
           name: linux-build-artifacts
+          path: dist/
+
+      - name: Download Windows artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: windows-build-artifacts
           path: dist/
 
       - name: List release files
@@ -113,6 +124,6 @@ jobs:
             dist/*.exe
             dist/*.zip
           draft: false
-          prerelease: true
+          prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 21
         uses: actions/setup-java@v3
@@ -52,7 +54,7 @@ jobs:
         run: ls -la dist/
 
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.sha }}
           name: "Build ${{ github.sha }}"
@@ -64,6 +66,6 @@ jobs:
             dist/StudentEditor.AppImage
             dist/StudentEditor-linux-x64.tar.gz
           draft: false
-          prerelease: false
+          prerelease: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

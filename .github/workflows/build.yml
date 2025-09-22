@@ -24,7 +24,7 @@ jobs:
         run: |
           mvn clean package -Plinux
           mkdir -p dist
-          tar -czf dist/StudentEditor-linux-x64.tar.gz -C build/linux-binary/StudentEditor
+          tar -czf dist/StudentEditor-linux-x64.tar.gz -C build/linux-binary/ StudentEditor
           echo "Binary tar.gz OK"
 
       - name: Build AppImage

@@ -2,6 +2,7 @@ package com.gilberto009199.editor;
 
 import java.util.logging.*;
 
+import com.gilberto009199.editor.assets.IconType;
 import com.gilberto009199.editor.state.AppState;
 import com.gilberto009199.editor.ui.MainUI;
 
@@ -36,7 +37,8 @@ public class App extends Application {
         Scene scene = new Scene(mainUI, 800, 600);
         scene.getStylesheets().add(getClass().getResource("/css/style.css").toExternalForm());
 
-        primaryStage.setTitle("My Editor");
+        primaryStage.setTitle("Student Editor");
+        primaryStage.getIcons().add(IconType.APP.getImageView(16).getImage());
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(400);
         primaryStage.setMinWidth(500);

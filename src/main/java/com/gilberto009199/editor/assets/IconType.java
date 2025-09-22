@@ -8,10 +8,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
 public enum IconType {
-	
+
+    APP("app.png"),
+
     JAVASCRIPT("javascript.png"),
     
     PYTHON("python.png");
+
 
     private final String fileName;
 

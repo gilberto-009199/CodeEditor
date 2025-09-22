@@ -1,0 +1,64 @@
+name: Build and Release Linux App Image
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [created]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'openjdk'
+          cache: 'maven'
+
+      - name: Build Binary
+        run: |
+          mvn clean package -Plinux
+          mkdir -p dist
+          tar -czf dist/StudentEditor-linux-x64.tar.gz -C build/linux-binary/StudentEditor
+          echo "Binary tar.gz OK"
+
+      - name: Build AppImage
+        run: |
+          mvn package -Plinux-app-image
+          mkdir -p dist
+          cp build/linux-app-image/StudentEditor.AppImage dist/
+          echo "AppImage OK"
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+           name: linux-build-artifacts
+           path: dist/
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: linux-build-artifacts
+          path: dist/
+
+      - name: List release files
+        run: ls -la dist/
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/StudentEditor.AppImage
+            dist/StudentEditor-linux-x64.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

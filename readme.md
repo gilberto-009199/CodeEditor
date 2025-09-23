@@ -1,8 +1,15 @@
-# Code editor
+# Student editor
+
 
 <img src="./screen.gif" alt="home desktop, runner js and python">
 
-Editor and Runner portable JavaScript and Python.
+<br/>
+
+<img align="right" src="https://filedn.com/l3HMwWFeFPE7q4xHdixbsqH/github.assets/graalvm.svg" alt="GraalVM ICON" width="128px"/>
+<img align="right" src="https://filedn.com/l3HMwWFeFPE7q4xHdixbsqH/github.assets/javascript.svg" alt="JavaScript ICON" width="32px"/>
+<img align="right" src="https://filedn.com/l3HMwWFeFPE7q4xHdixbsqH/github.assets/python.svg" alt="Python ICON" width="32px"/>
+
+Editor and Runner portable **JavaScript** and **Python**. Make in **GraalVM Polyglot** and **JavaFX**.
 
 ## How Build
 
@@ -33,4 +40,5 @@ mvn clean package -Pwindows-package
 
 
 ```
+
 

@@ -1,3 +1,5 @@
+[![DOWNLOAD](./downlaod-latest.svg)](https://github.com/gilberto-009199/CodeEditor/releases/latest)
+
 # Student editor
 
 
@@ -40,5 +42,6 @@ mvn clean package -Pwindows-package
 
 
 ```
+
 
 
